@@ -62,6 +62,12 @@ body {
   initial-value: 0deg;
 }
 
+@property --gap {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
 .dock {
   position: relative;
   display: flex;
@@ -84,33 +90,53 @@ body {
   inset: -1px;
   border-radius: inherit;
   padding: 1.5px;
+  /* Same hue range as the ascii background (blue -> magenta -> orange),
+     mirrored so the loop closes without a hard seam. */
   background: conic-gradient(
     from var(--angle),
-    hsl(215 85% 60%),
-    hsl(255 85% 60%),
-    hsl(300 85% 58%),
-    hsl(340 85% 58%),
-    hsl(15 90% 58%),
-    hsl(215 85% 60%)
+    hsl(215 82% 52%),
+    hsl(300 82% 58%),
+    hsl(25 82% 64%),
+    hsl(300 82% 58%),
+    hsl(215 82% 52%)
   );
+  /* Layer 1+2: isolate the ring (content-box excluded from border-box).
+     Layer 3: a conic sweep that reveals more of the ring as --gap shrinks. */
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0),
+    conic-gradient(
+      from 0deg,
+      #000 0 calc(360deg - var(--gap)),
+      transparent calc(360deg - var(--gap)) 360deg
+    );
+  mask-composite: exclude, intersect;
   opacity: 0;
   pointer-events: none;
-  animation: dock-border-spin 2.6s linear infinite;
-  animation-play-state: paused;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.15s ease;
 }
 
 .dock:hover::before {
   opacity: 1;
-  animation-play-state: running;
+  animation:
+    dock-border-spin 3.2s linear infinite,
+    dock-border-reveal 0.9s cubic-bezier(0.25, 0, 0.2, 1) both;
 }
 
 @keyframes dock-border-spin {
   to {
     --angle: 360deg;
+  }
+}
+
+@keyframes dock-border-reveal {
+  from {
+    --gap: 360deg;
+  }
+  to {
+    --gap: 0deg;
   }
 }
 
