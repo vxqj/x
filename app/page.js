@@ -7,13 +7,6 @@ export default function Home() {
         <span>xxxxx</span>
       </div>
 
-      <div className="hero">
-        <p className="prompt">
-          you found it<span className="cursor" />
-        </p>
-        <h1>everything's down there ↓</h1>
-      </div>
-
       <Dock />
     </main>
   );
