@@ -86,11 +86,12 @@ body {
   padding: 1.5px;
   background: conic-gradient(
     from var(--angle),
-    #6d5efc,
-    #00d4ff,
-    #ff5ec4,
-    #ffb86b,
-    #6d5efc
+    hsl(215 85% 60%),
+    hsl(255 85% 60%),
+    hsl(300 85% 58%),
+    hsl(340 85% 58%),
+    hsl(15 90% 58%),
+    hsl(215 85% 60%)
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
