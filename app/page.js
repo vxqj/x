@@ -1,10 +1,10 @@
-import AsciiBg from "./AsciiBg";
+import FluidBg from "./FluidBg";
 import Dock from "./Dock";
 
 export default function Home() {
   return (
     <main className="page">
-      <AsciiBg />
+      <FluidBg />
       <Dock />
     </main>
   );
