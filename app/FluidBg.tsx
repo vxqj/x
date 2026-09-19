@@ -7,6 +7,17 @@ const CELL = 13; // on-screen spacing between glyphs, in px
 const SUPERSAMPLE = 3; // subpixels per glyph cell, averaged like a real image->ascii pass
 const RAMP = " .:-=+xXCAI$F#%@"; // dark -> light glyph ramp, more steps for smoother shading
 
+// Maps brightness to a color: deep blue/violet in the quiet areas, sliding
+// through magenta into warm orange/gold where the fluid is densest, with a
+// slow overall hue drift so the whole field breathes over time.
+function colorFor(light: number, time: number): string {
+  const hue = (215 + light * 170 + Math.sin(time * 0.07) * 18 + 360) % 360;
+  const saturation = 82;
+  const lightness = 32 + light * 42;
+  const alpha = Math.min(0.92, 0.12 + light * 0.72);
+  return `hsla(${hue.toFixed(1)}, ${saturation}%, ${lightness.toFixed(1)}%, ${alpha.toFixed(3)})`;
+}
+
 export default function FluidBg() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number>();
@@ -99,8 +110,7 @@ export default function FluidBg() {
           const ch = RAMP[idx];
           if (ch === " ") continue;
 
-          const alpha = Math.min(0.85, 0.1 + light * 0.65);
-          ctx!.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+          ctx!.fillStyle = colorFor(light, t);
           ctx!.fillText(ch, c * CELL, r * CELL);
         }
       }
