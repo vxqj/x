@@ -1,7 +1,3 @@
-"use client";
-
-import { useRef } from "react";
-
 const ICONS = {
   tiktok: (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -32,39 +28,13 @@ const LINKS = [
   { key: "discord", label: "Discord", href: "https://discord.gg/killed" },
 ];
 
-// Distance-based scale, like a macOS dock magnifying under the cursor.
-const MAX_SCALE = 1.55;
-const FALLOFF = 90; // px radius of influence
-
 export default function Dock() {
-  const itemRefs = useRef([]);
-
-  function handleMouseMove(e) {
-    itemRefs.current.forEach((el) => {
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const center = rect.left + rect.width / 2;
-      const dist = Math.abs(e.clientX - center);
-      const influence = Math.max(0, 1 - dist / FALLOFF);
-      const scale = 1 + influence * (MAX_SCALE - 1);
-      const lift = influence * 10;
-      el.style.transform = `translateY(-${lift}px) scale(${scale})`;
-    });
-  }
-
-  function handleMouseLeave() {
-    itemRefs.current.forEach((el) => {
-      if (el) el.style.transform = "translateY(0) scale(1)";
-    });
-  }
-
   return (
     <nav className="dock-wrap" aria-label="Social links">
-      <div className="dock" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-        {LINKS.map((link, i) => (
+      <div className="dock">
+        {LINKS.map((link) => (
           <a
             key={link.key}
-            ref={(el) => (itemRefs.current[i] = el)}
             className="dock-item"
             href={link.href}
             target="_blank"

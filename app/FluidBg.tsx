@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import { FluidField, paintLiquidSource, type PointerField } from "./fluidField";
 
-const CELL = 13; // on-screen spacing between glyphs, in px
-const SUPERSAMPLE = 3; // subpixels per glyph cell, averaged like a real image->ascii pass
+const CELL = 10; // on-screen spacing between glyphs, in px
+const SUPERSAMPLE = 2; // subpixels per glyph cell, averaged like a real image->ascii pass
 const RAMP = " .:-=+xXCAI$F#%@"; // dark -> light glyph ramp, more steps for smoother shading
 
 // Maps brightness to a color: deep blue/violet in the quiet areas, sliding
@@ -73,7 +73,7 @@ export default function FluidBg() {
     window.addEventListener("mousemove", handleMove);
     window.addEventListener("mouseleave", handleLeave);
 
-    ctx.font = `${Math.round(CELL * 0.75)}px "JetBrains Mono", ui-monospace, monospace`;
+    ctx.font = `${Math.round(CELL * 1.3)}px "JetBrains Mono", ui-monospace, monospace`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
