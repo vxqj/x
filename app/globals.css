@@ -100,19 +100,27 @@ body {
     hsl(300 82% 58%),
     hsl(215 82% 52%)
   );
-  /* Layer 1+2: isolate the ring (content-box excluded from border-box).
-     Layer 3: a conic sweep that reveals more of the ring as --gap shrinks. */
+  /* Static ring fallback (no reveal sweep) for browsers that only
+     understand the prefixed mask properties. */
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
+  /* Each layer is composited with the layers BELOW it, so order matters:
+       layer 3 (content-box) + layer 2 (border-box), exclude -> hollow ring
+       layer 1 (conic sweep), intersect -> only the revealed part of the ring
+     Putting the conic at the bottom instead makes the "exclude" run against
+     the content-box, which fills the whole dock while --gap is > 0. */
   mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0),
     conic-gradient(
       from 0deg,
       #000 0 calc(360deg - var(--gap)),
       transparent calc(360deg - var(--gap)) 360deg
-    );
-  mask-composite: exclude, intersect;
+    ),
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0) content-box;
+  mask-composite: intersect, exclude;
+  /* Resting state = full ring, so fading out on mouse-leave doesn't snap
+     the ring away. The hover animation still starts from 360deg. */
+  --gap: 0deg;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease;
