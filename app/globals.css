@@ -38,24 +38,11 @@ body {
   justify-content: center;
 }
 
-.bg-wall {
+.bg-canvas {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  z-index: 0;
   pointer-events: none;
-  user-select: none;
-}
-
-.bg-wall span {
-  font-size: min(34vw, 420px);
-  line-height: 1;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.035);
-  letter-spacing: -0.02em;
-  white-space: nowrap;
 }
 
 /* Dock */
@@ -132,13 +119,15 @@ body {
   color: var(--fg);
   white-space: nowrap;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
 }
 
 .dock-item:hover .dock-label,
 .dock-item:focus-visible .dock-label {
   opacity: 1;
+  visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
 
