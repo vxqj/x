@@ -41,8 +41,8 @@ export class FluidField {
     // Entry establishes an anchor; it must not paint a dot or connect to an old exit.
     if (this.continuousWake && !this.previous) { this.previous = { x, y }; return; }
     const previous = this.previous ?? { x: x - .004, y: y - .001 };
-    const dx = Math.max(-.09, Math.min(.09, x - previous.x));
-    const dy = Math.max(-.09, Math.min(.09, y - previous.y));
+    const dx = Math.max(-.16, Math.min(.16, x - previous.x));
+    const dy = Math.max(-.16, Math.min(.16, y - previous.y));
     this.previous = { x, y };
     if (Math.abs(dx) + Math.abs(dy) < .0001) return;
     const speed = Math.min(1, Math.hypot(dx * this.aspect, dy) * 25 + .06);
@@ -96,13 +96,13 @@ export class FluidField {
           const along = Math.max(0, Math.min(1, (ax * bx + ay * by) / (bx * bx + by * by || 1)));
           rx = ax - bx * along; ry = ay - by * along;
           const distance = rx * rx + ry * ry;
-          if (distance > .0225) continue;
-          const weight = Math.exp(-distance / .0032);
+          if (distance > .04) continue;
+          const weight = Math.exp(-distance / .006);
           const travel = Math.hypot(stroke.dx * xScale, stroke.dy * yScale);
           const curl = Math.min(.025, travel * .55);
-          dx += (stroke.dx * 4.2 - ry * curl) * weight;
-          dy += (stroke.dy * 4.2 + rx * curl) * weight;
-          ink = Math.max(ink, Math.min(.7, travel * 18) * weight);
+          dx += (stroke.dx * 6.5 - ry * curl) * weight;
+          dy += (stroke.dy * 6.5 + rx * curl) * weight;
+          ink = Math.max(ink, Math.min(.9, travel * 26) * weight);
           continue;
         }
         const distance = rx * rx + ry * ry;
@@ -114,9 +114,9 @@ export class FluidField {
         dy += (stroke.dy * 2.8 + rx * speed * .16) * weight;
         ink += speed * weight * .3;
       }
-      this.back[i] = Math.max(-.18, Math.min(.18, dx));
-      this.back[i + 1] = Math.max(-.18, Math.min(.18, dy));
-      this.back[i + 2] = Math.min(.8, ink);
+      this.back[i] = Math.max(-.28, Math.min(.28, dx));
+      this.back[i + 1] = Math.max(-.28, Math.min(.28, dy));
+      this.back[i + 2] = Math.min(.95, ink);
       peak = Math.max(peak, Math.abs(dx), Math.abs(dy), ink);
     }
     [this.front, this.back] = [this.back, this.front];

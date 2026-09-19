@@ -3,9 +3,9 @@
 import { useEffect, useRef } from "react";
 import { FluidField, paintLiquidSource, type PointerField } from "./fluidField";
 
-const CELL = 18; // on-screen spacing between glyphs, in px
+const CELL = 13; // on-screen spacing between glyphs, in px
 const SUPERSAMPLE = 3; // subpixels per glyph cell, averaged like a real image->ascii pass
-const RAMP = " .:-=+*#%@"; // dark -> light glyph ramp
+const RAMP = " .:-=+xXCAI$F#%@"; // dark -> light glyph ramp, more steps for smoother shading
 
 export default function FluidBg() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -47,7 +47,7 @@ export default function FluidBg() {
       bufH = rows * SUPERSAMPLE;
       pixels = new Uint8ClampedArray(bufW * bufH * 4);
 
-      flow = new FluidField(aspect, 3.2, true);
+      flow = new FluidField(aspect, 1.8, true);
     }
 
     function handleMove(e: MouseEvent) {
